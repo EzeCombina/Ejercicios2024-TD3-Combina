@@ -1,4 +1,4 @@
-#include "../inc/Funciones.h"
+#include "funcion.c"
 
 int main()
 {

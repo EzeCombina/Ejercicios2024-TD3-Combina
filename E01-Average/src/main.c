@@ -1,4 +1,4 @@
-#include "../inc/Funciones.h"
+#include "funcion.c"
 
 float Numeros[100];
 int n = 0;

@@ -1,6 +1,5 @@
-#ifndef STDIO_H
-    #define STDIO_H
-#endif
+#include <stdio.h>
+#include "../inc/Funciones.h"
 
 float Promedio(float Numeros[], int m)
 {

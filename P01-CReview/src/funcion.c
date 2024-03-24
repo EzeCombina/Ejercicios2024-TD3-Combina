@@ -1,16 +1,6 @@
-#ifndef STDIO_H
-    #define STDIO_H    
-#endif
-
-#define CantidadMediciones 10
-
-struct Medicion {
-
-    float Humedad;
-    float VelocidadViento;
-    int Temperatura;
-
-};
+#include <stdio.h>
+#include <stdlib.h>
+#include "../inc/Funciones.h"
 
 void Funcion(struct Medicion a[], int **TempMax, float **Prom)
 {

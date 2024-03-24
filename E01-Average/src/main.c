@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include "../lib/Funciones.h"
-
-#define CORTE 9999
+#include "../inc/Funciones.h"
 
 float Numeros[100];
 int n = 0;

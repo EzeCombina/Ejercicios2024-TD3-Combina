@@ -1,34 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "random.c"
 #include "funcion.c"
+
+int TempMax = 0;
+float Prom = 0.0;
 
 int main()
 {
 
-    struct Medicion x[CantidadMediciones];
-
-    // Variables que va a retornar la funcion 
-    int temp1 = 0, *TempMax;
-    float temp2 = 0, *Prom;
-
-    TempMax = &temp1;
-    Prom = &temp2;
-
-    // Valores aleatorios de Humedad. 
-    for(int n = 0; n < CantidadMediciones; n++)
-    {
-        x[n].Humedad = rand() % 200;
-    }
-
-    // Valores aleatorios de Velocidad del viento. 
-    for(int n = 0; n < CantidadMediciones; n++)
-    {
-        x[n].VelocidadViento = rand() % 200;
-    }
-
-    // Valores aleatorios de Temperatura. 
-    for(int n = 0; n < CantidadMediciones; n++)
-    {
-        x[n].Temperatura = rand() % 500;
-    }
+    // Funcion para obtener valores aleatorios de mediciones
+    random();
 
     // Imprimir las mediciones de Humedad. 
     printf("Los valores medidos de humedad son: ");
@@ -40,9 +22,9 @@ int main()
         }else{printf("%.2f, ", x[n].Humedad);}
     }
 
-    // Funcion calculo del promedio de la humedad y la temperatura máxima 
+    // Funcion para calcular el promedio de la humedad y la temperatura máxima 
 
-    Funcion(x, &TempMax, &Prom);
+    Funcion();
 
     printf("\nLos valores medidos de temperatura son: ");
     for(int n = 0; n < CantidadMediciones; n++)
@@ -53,8 +35,8 @@ int main()
         }else{printf("%d, ", x[n].Temperatura);}
     }
 
-    printf("\nLa temperatura maxima medida es de: %d", temp1);
+    printf("\nLa temperatura maxima medida es de: %d", TempMax);
 
-    printf("\nEl promedio de la humedad es de: %.2f", temp2);
+    printf("\nEl promedio de la humedad es de: %.2f", Prom);
 
 }

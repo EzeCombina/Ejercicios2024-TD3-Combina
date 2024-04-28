@@ -1,12 +1,14 @@
-#include <stdbool.h>
 #include <stdint.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_log.h"
 #include "../include/pulsador.h"
 #include "../include/trafficLights.h"
 #include "../include/led.h"
 
 #define PULSADOR GPIO_NUM_12
+
+static const char *TAG = "MAIN";
 
 #define T_ESPERA 4 //cantidad de veces que va a ingresar antes de cambiar de estado
 EstadoBoton estadoActualBoton;
@@ -70,10 +72,10 @@ void actualizarBoton()
 
         case DESCENDENTE:      
             if(contDescendente >= T_ESPERA){
-                if( !gpio_get_level(PULSADOR) ){
-                estadoActualBoton = BAJO;
-                //botonLiberado();
-                } else{estadoActualBoton = ALTO;}
+                if(!gpio_get_level(PULSADOR))
+                {
+                    estadoActualBoton = BAJO;
+                }else{estadoActualBoton = ALTO;}
                 contDescendente = 0;
             }
             contDescendente++;
@@ -88,11 +90,15 @@ void actualizarBoton()
 
 void botonPresionado()
 {
-    printf("Boton");
+    ESP_LOGI(TAG, "Pulsador");
     if(Funcionamiento == Normal)
     {
         Funcionamiento = Intermitente;
-    }else{Funcionamiento = Normal;}
+    }
+    else
+    {
+        Funcionamiento = Normal;
+        estadoActualSemaforo = R;
+    }
     apagarTodo();
-    vTaskDelay(50);
 }

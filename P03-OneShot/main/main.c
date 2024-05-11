@@ -3,9 +3,9 @@
  * @author Ezequiel Combina
  * @brief 
  * @version 0.1
- * @date 2024-05-06
+ * @date 2024-05-11
  * 
- * @copyright Copyright (c) 2023
+ * @copyright Copyright (c) 2024
  * 
  */
 
@@ -15,8 +15,6 @@
 #include "freertos/FreeRTOSConfig.h"
 #include "driver/gpio.h"                    // Para driver de E/S digitales
 #include "esp_log.h"
-
-static const char *TAG = "MAIN";
 
 //-------------------- Definiciones -------------
 #define PULSADOR    GPIO_NUM_12
@@ -39,11 +37,13 @@ TaskHandle_t xHandleB = NULL;
 TaskHandle_t xHandleC = NULL;
 TaskHandle_t xHandleMonitor = NULL;
 
+static const char *TAG = "MAIN";
+
 //-------------------- main -------------
 void app_main() 
 {
-    //UBaseType_t prioridad = uxTaskPriorityGet (NULL);   //para obtener la prioridad de la tarea principal
-    //printf("%d/n",prioridad);   //debería ser 1
+    //UBaseType_t prioridad = uxTaskPriorityGet (NULL);   // Para obtener la prioridad de la tarea principal
+    //printf("%d/n",prioridad);                           // Debería ser 3
 
     xTaskCreatePinnedToCore(TaskA,              // Función que implementa la tarea. La misma no debe retornar.
                  "Tarea A",                     // Nombre que reprenta la tarea, para facilitar la depuración.
@@ -53,7 +53,7 @@ void app_main()
                  &xHandleA,                     // Puntero a la tarea
                  0                              // Procesador donde se ejecuta
                 );
-    configASSERT( xHandleA );                   // Entra si no se pudieron crear las tareas, para debug 
+    configASSERT(xHandleA);                   // Entra si no se pudieron crear las tareas, para debug 
 
     // PinnedToCore es para seleccionar el nucleo con el que se va a ejecutar la tarea. 
 
@@ -137,8 +137,8 @@ void TaskMonitor(void *pvParameters)
 {
     while(true)
     {
-        //Muestra el espacio mínimo libre de stack que ha habido desde que comenzó la tarea.
-        //Cuanto menor sea el número devuelto, más cerca está la tarea de desbordar su stack.
+        // Muestra el espacio mínimo libre de stack que ha habido desde que comenzó la tarea.
+        // Cuanto menor sea el número devuelto, más cerca está la tarea de desbordar su stack.
         ESP_LOGI(TAG, "Task %u min %u bytes", 1,  uxTaskGetStackHighWaterMark(xHandleA));
         ESP_LOGI(TAG, "Task %u min %u bytes", 2,  uxTaskGetStackHighWaterMark(xHandleB));
         ESP_LOGI(TAG, "Task %u min %u bytes", 3,  uxTaskGetStackHighWaterMark(xHandleC));

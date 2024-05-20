@@ -14,28 +14,26 @@ static void botonLiberado(uint8_t indice);
 void TaskPulsador(void *taskParmPtr);
 
 /*==================[Variables]==============================*/
-gpio_int_type_t pulsadorPines[N_PULSADOR] = {GPIO_NUM_12};
+gpio_int_type_t pulsadorPines[N_PULSADOR] = {GPIO_NUM_12, GPIO_NUM_13};
 
 pulsadorInfo pulsador[N_PULSADOR];
 
-TickType_t tiempo, tiempoflag;
+TickType_t tiempo;
 
 static const char *TAG = "PULSADOR";
 
 /*==================[Implementaciones]=================================*/
 TickType_t obtenerDiferencia(uint8_t indice, TickType_t periodo)
 {
-    if(pulsador[indice].diferenciaTiempo < periodo)
+    if(pulsador[indice].diferenciaTiempo <= periodo)
     {
         tiempo = pulsador[indice].diferenciaTiempo;
-        tiempoflag = tiempo;
         return tiempo;
     }
     else
     {
-        ESP_LOGI(TAG, "El valor de tiempo ingresado es mayor al periodo.");
-        pulsador[indice].diferenciaTiempo = tiempoflag;
-        return tiempoflag;
+        tiempo = periodo;
+        return tiempo;
     }
 }
 
@@ -62,7 +60,7 @@ void inicializarPulsador(void)
         NULL,                          	        // Parametros de tarea
         tskIDLE_PRIORITY+1,         	        // Prioridad de la tarea -> Queremos que este un nivel encima de IDLE
         NULL,                          		    // Puntero a la tarea creada en el sistema
-        1                                       // Numero de procesador
+        1                                       // Numero de procesador (Procesador B)
     );
 
     // Gestion de errores

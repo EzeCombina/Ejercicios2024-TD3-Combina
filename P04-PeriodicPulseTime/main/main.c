@@ -26,13 +26,10 @@
 #define PROCESADORB     1
 
 /*==================[Variables globales]======================*/
-gpio_int_type_t led[N_PULSADOR] = {GPIO_NUM_25};
-
-//static const char *TAG = "MAIN";
+gpio_int_type_t led[N_PULSADOR] = {GPIO_NUM_25, GPIO_NUM_26};
 
 /*==================[Prototipos de funciones]======================*/
 void TaskLed(void *taskParmPtr);       //Prototipo de la función de la tarea
-//void tarea_tecla(void* taskParmPtr);
 
 /*==================[Main]======================*/
 void app_main()
@@ -74,24 +71,29 @@ void TaskLed(void *taskParmPtr)
 
     TickType_t dif;
     
-    TickType_t xPeriodicity = PERIODO; // Tarea periodica
+    TickType_t xPeriodicity = PERIODO; 
 
     TickType_t xLastWakeTime = xTaskGetTickCount();
-
-    TickType_t periodo = PERIODO;
 
     /*==================[Bucle]======================*/
     while(1)
     {
-        dif = obtenerDiferencia(indice, periodo);
+        dif = obtenerDiferencia(indice, xPeriodicity);
 
         if(dif > TIEMPO_NO_VALIDO)
         {
-            gpio_set_level(led[indice], 1);
-            vTaskDelay(dif);
-            
-            gpio_set_level(led[indice], 0);
-            vTaskDelayUntil(&xLastWakeTime, xPeriodicity);
-        }else{vTaskDelayUntil(&xLastWakeTime, xPeriodicity);}
+            if(dif == PERIODO)  // Este if se agrega para evitar que no sea una continua cte. 
+            {
+                gpio_set_level(led[indice], 1);
+            }
+            else
+            {
+                gpio_set_level(led[indice], 1);
+                vTaskDelay(dif);
+                
+                gpio_set_level(led[indice], 0);
+            }
+        }
+        vTaskDelayUntil(&xLastWakeTime, xPeriodicity);
     } 
 }

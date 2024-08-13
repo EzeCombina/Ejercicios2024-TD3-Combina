@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <errno.h>
@@ -9,102 +10,66 @@
 
 #define Cant_Puertas 3
 
-char Puerta;
+char Nombres_Puertas[Cant_Puertas] = {'A', 'B', 'C'};
+char Lectura;
 
-enum Lectura {
-    A,
-    B,
-    C
-}Cambio_Puerta;
-
-enum BOOLEAN {
-    Abierto,
-    Cerrado
-}Cambio_Estado[Cant_Puertas];
+typedef struct {
+    char Nombre;
+    char *Estado;
+}Puertas;
 
 void *printDoor(void *tid)
 {
-    while(1)
+    Puertas *Puerta_Seleccionada_ptr = (Puertas*) tid;
+    printf("Puerta creada -> %c\n", Puerta_Seleccionada_ptr->Nombre);
+
+    while(1) 
     {
-        scanf("%c", &Puerta);
-
-        switch(Puerta)
+        if(Lectura == Puerta_Seleccionada_ptr->Nombre) 
         {
-            case 'A':
-                Cambio_Puerta = Puerta;
-                if(Cambio_Estado[Cambio_Puerta] == 0)
-                {
-                    printf("Puerta %c abierta, presione %c para cerrarla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                else
-                {
-                    printf("Puerta %c cerrada, presione %c para abrirla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                break;
+            //printf("Puerta -> %c\n", Puerta_Seleccionada_ptr->Nombre);
+            if(Puerta_Seleccionada_ptr->Estado == "Cerrada") 
+            {
+                Puerta_Seleccionada_ptr->Estado = "Abierta";
+            } 
+            else 
+            {
+                Puerta_Seleccionada_ptr->Estado = "Cerrada";
+            }
 
-            case 'B':
-                Cambio_Puerta = Puerta;
-                if(Cambio_Estado[Cambio_Puerta] == 0)
-                {
-                    printf("Puerta %c abierta, presione %c para cerrarla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                else
-                {
-                    printf("Puerta %c cerrada, presione %c para abrirla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                break;
-
-            case 'C':
-                Cambio_Puerta = Puerta;
-                if(Cambio_Estado[Cambio_Puerta] == 0)
-                {
-                    printf("Puerta %c abierta, presione %c para cerrarla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                else
-                {
-                    printf("Puerta %c cerrada, presione %c para abrirla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                break;
-            
-            /*
-            case 'D':
-                Cambio_Puerta = Puerta;
-                if(Cambio_Estado[Cambio_Puerta] == 0)
-                {
-                    printf("Puerta %c abierta, presione %c para cerrarla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                else
-                {
-                    printf("Puerta %c cerrada, presione %c para abrirla\n", Puerta, Puerta);
-                    Cambio_Estado[Cambio_Puerta] = !Cambio_Estado[Cambio_Puerta];
-                }
-                break;
-            */
-
-            default:
-                break;
+            if(Puerta_Seleccionada_ptr->Estado == "Abierta") 
+            {
+                printf("Puerta %c abierta, presione %c para cerrarla.\n", Puerta_Seleccionada_ptr->Nombre, Puerta_Seleccionada_ptr->Nombre);
+            } 
+            else 
+            {
+                printf("Puerta %c cerrada, presione %c para abrirla.\n", Puerta_Seleccionada_ptr->Nombre, Puerta_Seleccionada_ptr->Nombre);
+            }
         }
     }
 }
 
 int main()
 {	
-	pthread_t threads;
-	int status;
+	pthread_t threads[Cant_Puertas];
+	int status, i;
+    Puertas Puerta_Seleccionada[Cant_Puertas];
 
-    status = pthread_create(&threads, NULL, printDoor, NULL);
-    if(status != 0) 
+    for(i = 0; i < Cant_Puertas; i++)
+    {   
+        Puerta_Seleccionada[i].Nombre = Nombres_Puertas[i];
+        Puerta_Seleccionada[i].Estado = "Cerrada";
+
+        status = pthread_create(&threads[i], NULL, printDoor, &Puerta_Seleccionada[i]);
+        if(status != 0) 
+        {
+            //printf("Oops. pthread create returned error code %d\n", status);
+            exit(-1);
+        }//else{printf("pthread created sucessfully\n");}
+    }
+
+    while(1)
     {
-        printf("Oops. pthread create returned error code %d\n", status);
-        exit(-1);
-    }else{printf("pthread created sucessfully\n");}
-
-    pthread_join(threads, NULL); 
+        scanf("%c", &Lectura);
+    }
 }

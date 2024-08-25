@@ -16,7 +16,7 @@ int main(void)  {
     if(pid == 0)
     {
         printf("PID Hijo -> %d\n", getpid());
-        sleep(20);
+        sleep(5);
         //sleep(10);
         printf("El proceso hijo a finalizado\n");
         exit(rv);
@@ -35,11 +35,12 @@ int main(void)  {
 /*
 
     Cuando termina el proceso padre al proceso hijo se le asigna otro proceso padre, en este caso con un ppid de 1.
-    Este mismo proceso se termina de ejecutar normalmente con su nuevo proceso padre. 
+    Este mismo proceso se termina de ejecutar normalmente con su nuevo proceso padre. (CUANDO SE COMENTA LA FUNCION WAIT)
+
+    En el caso de que el tiempo de ejecución del proceso hijo sea mayor que el del padre, el proceso padre termina de ejecutarce y espera a 
+    que el hijo termine para finalizar ambos procesos. (CON LA FUNCION WAIT)
 
     En caso de que el tiempo de ejecucion del hijo sea menor al del padre cuando este termine quedará en modo "defunct". Cuando el proceso
-    padre termine se eliminan ambos procesos. 
-
-    Cuando se usa la funcion "wait" el proceso padre espera a que termine de ejecutar el proceso hijo para terminar. 
+    padre termine se eliminan ambos procesos. (CON LA FUNCION WAIT)
 
 */

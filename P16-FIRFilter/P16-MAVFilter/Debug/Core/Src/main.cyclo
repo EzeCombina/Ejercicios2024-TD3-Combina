@@ -1,0 +1,6 @@
+../Core/Src/main.c:92:5:main	3
+../Core/Src/main.c:136:6:ProcessDSP	4
+../Core/Src/main.c:172:6:HAL_ADC_ConvHalfCpltCallback	1
+../Core/Src/main.c:186:6:HAL_ADC_ConvCpltCallback	1
+../Core/Src/main.c:204:6:SystemClock_Config	3
+../Core/Src/main.c:253:6:Error_Handler	1
